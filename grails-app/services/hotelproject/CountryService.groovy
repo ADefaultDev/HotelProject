@@ -25,6 +25,7 @@ class CountryService {
 
     }
 
+    @Transactional
     def deleteCountry(Long id) {
 
         def country = Country.get(id)
@@ -32,12 +33,13 @@ class CountryService {
             return [success: false, message: "Страна не найдена"]
         }
 
-        if (Hotel.countByCountry(country) > 0) {
-            return [success: false, message: "Нельзя удалить страну '${country.name}', пока к ней привязаны отели"]
+        try {
+            country.delete(flush: true)
+            return [success: true, message: "Страна '${country.name}' и все связанные отели удалены"]
+        } catch (Exception e) {
+            log.error("Ошибка при удалении страны", e)
+            return [success: false, message: "Ошибка при удалении страны"]
         }
-
-        country.delete(flush: true)
-        [success: true, message: "Страна '${country.name}' удалена"]
 
     }
 

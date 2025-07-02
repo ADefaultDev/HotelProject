@@ -12,6 +12,10 @@ class Country {
         capital blank: false, maxSize: 128
     }
 
+    static mapping = {
+        hotels cascade: 'all-delete-orphan'
+    }
+
     String toString() {
         name
     }

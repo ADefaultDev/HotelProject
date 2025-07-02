@@ -53,11 +53,14 @@ class CountryController {
     def delete(Long id) {
 
         def result = countryService.deleteCountry(id)
-        flash.message = result.message
-        if (!result.success) {
-            flash.error = true
+
+        if (result.success) {
+            flash.message = result.message
+        } else {
+            flash.error = result.message
         }
-        redirect(action: "index")
+
+        redirect action: "index"
 
     }
 }

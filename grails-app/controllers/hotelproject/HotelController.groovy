@@ -1,13 +1,12 @@
 package hotelproject
 
-import grails.gorm.transactions.Transactional
-import org.springframework.http.HttpStatus
-
 class HotelController {
 
     def hotelService
 
+    @SuppressWarnings(['GroovyAssignabilityCheck'])
     def search() {
+
         try {
             def searchResults = hotelService.searchHotels(params)
             render view: "search", model: [
@@ -23,9 +22,11 @@ class HotelController {
             flash.error = "Ошибка при поиске отелей"
             redirect action: "list"
         }
+
     }
 
     def list() {
+
         try {
             [hotels: hotelService.listHotels()]
         } catch (Exception e) {
@@ -33,9 +34,11 @@ class HotelController {
             flash.error = "Ошибка при загрузке списка отелей"
             []
         }
+
     }
 
     def create() {
+
         try {
             [hotel: new Hotel(), countries: hotelService.getCountries()]
         } catch (Exception e) {
@@ -43,9 +46,11 @@ class HotelController {
             flash.error = "Ошибка при подготовке формы создания"
             redirect action: "list"
         }
+
     }
 
     def edit(Long id) {
+
         try {
             def hotel = hotelService.getHotel(id)
             if (!hotel) {
@@ -59,9 +64,12 @@ class HotelController {
             flash.error = "Ошибка при подготовке формы редактирования"
             redirect action: "list"
         }
+
     }
 
+    @SuppressWarnings(['GroovyAssignabilityCheck'])
     def save(Hotel hotel) {
+
         try {
             def result = hotelService.saveHotel(hotel)
             if (result.success) {
@@ -80,9 +88,12 @@ class HotelController {
             flash.error = "Серверная ошибка при сохранении отеля"
             redirect action: "create"
         }
+
     }
 
+    @SuppressWarnings(['GroovyAssignabilityCheck'])
     def update(Long id) {
+
         try {
             def result = hotelService.updateHotel(id, params)
             if (result.success) {
@@ -101,9 +112,11 @@ class HotelController {
             flash.error = "Серверная ошибка при обновлении отеля"
             redirect action: "list"
         }
+
     }
 
     def delete(Long id) {
+
         try {
             def result = hotelService.deleteHotel(id)
             if (result.success) {
@@ -116,5 +129,6 @@ class HotelController {
             flash.error = "Серверная ошибка при удалении отеля"
         }
         redirect action: "list"
+
     }
 }
