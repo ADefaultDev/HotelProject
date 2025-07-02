@@ -29,16 +29,19 @@
 
     <div class="fieldcontain ${hasErrors(bean: hotel, field: 'website', 'error')}">
         <label for="website">Сайт отеля</label>
-        <g:textField name="website" value="${hotel?.website}"/>
+        <g:textField name="website" value="${hotel?.website}"
+                     class="${hasErrors(bean: hotel, field: 'website', 'error-field')}"/>
 
-        <g:if test="${hasErrors(bean: hotel, field: 'website')}">
+        <g:hasErrors bean="${hotel}" field="website">
             <div class="error-message">
                 <g:eachError bean="${hotel}" field="website">
-                    <p>${it.defaultMessage}</p>
+                    <p class="text-danger"><g:message error="${it}"/></p>
                 </g:eachError>
             </div>
-        </g:if>
+        </g:hasErrors>
     </div>
+
+
 
     <g:submitButton name="update" value="Сохранить"/>
 </g:form>

@@ -5,7 +5,6 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class CountryService {
 
-
     def listAllCountries() {
         Country.list(order: 'name')
     }

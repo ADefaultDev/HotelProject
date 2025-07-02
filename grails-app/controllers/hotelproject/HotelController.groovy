@@ -22,7 +22,6 @@ class HotelController {
             flash.error = "Ошибка при поиске отелей"
             redirect action: "list"
         }
-
     }
 
     def list() {
@@ -131,4 +130,5 @@ class HotelController {
         redirect action: "list"
 
     }
+
 }

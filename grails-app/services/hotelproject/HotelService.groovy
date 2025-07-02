@@ -39,10 +39,6 @@ class HotelService {
 
     def saveHotel(Hotel hotel) {
 
-        if (hotel.website && !(hotel.website ==~ /^(http|https):\/\/.+/)) {
-            hotel.errors.rejectValue('website', 'invalid.url.format')
-        }
-
         if (!hotel.hasErrors() && hotel.save()) {
             return [success: true, hotel: hotel]
         }
