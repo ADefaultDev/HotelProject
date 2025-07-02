@@ -5,66 +5,59 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class CountryController {
 
+    def countryService
+
     def index() {
-        [countries: Country.list(order: 'name')]
+        [countries: countryService.listAllCountries()]
     }
 
     def create() {
         [country: new Country()]
     }
 
-    @SuppressWarnings(['GroovyAssignabilityCheck', 'MethodCallCanBeStatic'])
+    @SuppressWarnings(['GroovyAssignabilityCheck'])
     def save(Country country) {
-        if (country.save()) {
+
+        if (countryService.saveCountry(country)) {
             flash.message = "Страна '${country.name}' сохранена"
             redirect(action: "index")
         } else {
             render(view: "create", model: [country: country])
         }
+
     }
 
     def edit(Long id) {
-        [country: Country.get(id)]
+        [country: countryService.getCountryById(id)]
     }
 
-    @SuppressWarnings(['GroovyAssignabilityCheck', 'MethodCallCanBeStatic'])
+    @SuppressWarnings(['GroovyAssignabilityCheck'])
     def update(Long id) {
-        def country = Country.get(id)
+
+        def country = countryService.getCountryById(id)
         if (!country) {
             flash.message = "Страна не найдена"
             redirect(action: "index")
             return
         }
 
-        country.properties = params
-
-        if (country.save(flush: true)) {
+        if (countryService.updateCountry(country, params)) {
             flash.message = "Изменения сохранены"
             redirect(action: "index")
         } else {
             render(view: "edit", model: [country: country])
         }
+
     }
 
-
-    @Transactional
     def delete(Long id) {
-        def country = Country.get(id)
-        if (!country) {
-            flash.message = "Страна не найдена"
-            redirect(action: "index")
-            return
-        }
 
-        if (Hotel.countByCountry(country) > 0) {
-            flash.message = "Нельзя удалить страну '${country.name}', пока к ней привязаны отели"
-            redirect(action: "index")
-            return
+        def result = countryService.deleteCountry(id)
+        flash.message = result.message
+        if (!result.success) {
+            flash.error = true
         }
-
-        country.delete(flush: true)
-        flash.message = "Страна '${country.name}' удалена"
         redirect(action: "index")
-    }
 
+    }
 }
